@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Management Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .section {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 200px;
+        }
+        #fileList {
+            margin-top: 20px;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Management Tool</h1>
+    
+    <div class="container">
+        <div class="section">
+            <h2>Create File</h2>
+            <input type="text" id="fileName" placeholder="Enter file name">
+            <textarea id="fileContent" placeholder="Enter file content" rows="4" style="width: 100%;"></textarea>
+            <button onclick="createFile()">Create File</button>
+        </div>
+
+        <div class="section">
+            <h2>File List</h2>
+            <button onclick="listFiles()">Refresh List</button>
+            <div id="fileList"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+
+        async function createFile() {
+            const fileName = document.getElementById('fileName').value;
+            const content = document.getElementById('fileContent').value;
+
+            if (!fileName) {
+                alert('Please enter a file name');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/${fileName}`, {
+                    method: 'POST',
+                    body: content
+                });
+
+                if (response.ok) {
+                    alert('File created successfully');
+                    document.getElementById('fileName').value = '';
+                    document.getElementById('fileContent').value = '';
+                    listFiles();
+                } else {
+                    alert('Error creating file');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function listFiles() {
+            try {
+                const response = await fetch(API_URL);
+                const files = await response.json();
+                
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+
+                files.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    
+                    const fileName = document.createElement('span');
+                    fileName.textContent = file;
+                    fileName.style.cursor = 'pointer';
+                    fileName.onclick = () => readFile(file);
+                    
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = () => deleteFile(file);
+
+                    fileItem.appendChild(fileName);
+                    fileItem.appendChild(deleteButton);
+                    fileList.appendChild(fileItem);
+                });
+            } catch (error) {
+                alert('Error listing files: ' + error.message);
+            }
+        }
+
+        async function readFile(fileName) {
+            try {
+                const response = await fetch(`${API_URL}/${fileName}`);
+                const content = await response.text();
+                alert(`Content of ${fileName}:\n\n${content}`);
+            } catch (error) {
+                alert('Error reading file: ' + error.message);
+            }
+        }
+
+        async function deleteFile(fileName) {
+            if (!confirm(`Are you sure you want to delete ${fileName}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/${fileName}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('File deleted successfully');
+                    listFiles();
+                } else {
+                    alert('Error deleting file');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Load files when page loads
+        listFiles();
+    </script>
+</body>
+</html> 
