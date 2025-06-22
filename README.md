@@ -14,10 +14,10 @@ A basic file management tool built with Node.js core modules that allows you to 
 
 *Add your screenshots here! Just replace the placeholder text and link.*
 
-![Main Interface](./screenshot1.png "Main User Interface")
+![Main Interface](./Screenshot1.png "Main User Interface")
 *Caption: The main interface with the file creator and file list.*
 
-![File Operation](./screenshot2.png "File Operation Notification")
+![File Operation](./Screenshot2.png "File Operation Notification")
 *Caption: A toast notification after successfully creating a file.*
 
 ## Prerequisites
