@@ -1,14 +1,24 @@
 # Simple File Management Tool
 
-A basic file management tool built with Node.js core modules that allows you to create, read, and delete files through a web interface.
+A basic file management tool built with Node.js core modules that allows you to create, read, and delete files through a modern, eye-catching web interface.
 
 ## Features
 
 - Create new files with custom content
-- Read file contents
+- Read file contents by loading them into the editor
 - Delete files
-- List all files in the directory
-- Simple and intuitive web interface
+- List all available files
+- Sleek, modern, and responsive dark-themed UI with toast notifications
+
+## Screenshots
+
+*Add your screenshots here! Just replace the placeholder text and link.*
+
+![Main Interface](./screenshot1.png "Main User Interface")
+*Caption: The main interface with the file creator and file list.*
+
+![File Operation](./screenshot2.png "File Operation Notification")
+*Caption: A toast notification after successfully creating a file.*
 
 ## Prerequisites
 
